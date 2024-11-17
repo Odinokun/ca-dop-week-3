@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import { FilterValuesType } from './App';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
@@ -20,20 +20,13 @@ type PropsType = {
 export const Todolist: React.FC<PropsType> = ({ children, ...props }) => {
   const [listRef] = useAutoAnimate<HTMLUListElement>();
   let onChangeRef = useRef<HTMLInputElement>(null);
-  //let [title, setTitle] = useState("")
 
   const addTask = () => {
-    // props.addTask(title);
-    // setTitle("");
     if (onChangeRef.current) {
       props.addTask(onChangeRef.current.value);
       onChangeRef.current.value = '';
     }
   };
-
-  // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-  //     setTitle(e.currentTarget.value)
-  // }
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -46,17 +39,13 @@ export const Todolist: React.FC<PropsType> = ({ children, ...props }) => {
   const onCompletedClickHandler = () => props.changeFilter('completed');
 
   return (
-    <div>
+    <div className='todo'>
       <h3>{props.title}</h3>
       <div>
-        <input
-          //value={title}
-          // onChange={ onChangeHandler }
-          ref={onChangeRef}
-          onKeyDown={onKeyPressHandler}
-        />
+        <input ref={onChangeRef} onKeyDown={onKeyPressHandler} />
         <button onClick={addTask}>+</button>
       </div>
+
       <ul ref={listRef}>
         {props.tasks.map(t => {
           const onClickHandler = () => props.removeTask(t.id);
@@ -70,11 +59,13 @@ export const Todolist: React.FC<PropsType> = ({ children, ...props }) => {
           );
         })}
       </ul>
+
       <div>
         <button onClick={onAllClickHandler}>All</button>
         <button onClick={onActiveClickHandler}>Active</button>
         <button onClick={onCompletedClickHandler}>Completed</button>
       </div>
+
       {children}
     </div>
   );
